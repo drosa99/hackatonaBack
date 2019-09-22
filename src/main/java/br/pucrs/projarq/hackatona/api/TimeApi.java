@@ -1,13 +1,19 @@
 package br.pucrs.projarq.hackatona.api;
 
 import br.pucrs.projarq.hackatona.api.request.TimeRequest;
+import br.pucrs.projarq.hackatona.entity.Aluno;
 import br.pucrs.projarq.hackatona.entity.Time;
+import br.pucrs.projarq.hackatona.service.GeneratePDF;
 import br.pucrs.projarq.hackatona.service.TimeService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.ByteArrayInputStream;
 import java.util.List;
 
 @RestController
@@ -45,5 +51,23 @@ public class TimeApi {
     public ResponseEntity<Time> detalharTime(@PathVariable Long id) {
         Time time = timeService.detalheTime(id);
         return ResponseEntity.ok(time);
+    }
+
+    @RequestMapping(value = "/certificado/{id}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<InputStreamResource> citiesReport(@PathVariable Long id) {
+
+        List<Aluno> alunos = timeService.detalheTime(id).getIntegrantes();
+//        List<Aluno> alunos = Arrays.asList(Aluno.builder().nome("Daniela Amaral").curso("Engenharia de Software").build());
+
+        ByteArrayInputStream bis = GeneratePDF.certificado(alunos);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "inline; filename=certificado.pdf");
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(bis));
     }
 }
