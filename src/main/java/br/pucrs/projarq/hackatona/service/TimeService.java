@@ -36,7 +36,9 @@ public class TimeService {
                 .nomeTime(timeRequest.getNomeTime())
                 .integrantes(integrantes)
                 .build();
-        timeRepository.save(time);
+        Long id = timeRepository.save(time).getId();
+        alunoService.cadastrarTime(timeRequest.getIntegrantes(), id);
+
     }
 
     public void excluirTime(Long id) {
@@ -45,10 +47,18 @@ public class TimeService {
     }
 
     public List<Time> listarTimes() {
-        return timeRepository.findAll();
+        List<Time> times = timeRepository.findAll();
+        for (Time time : times) {
+            time.setIntegrantes(alunoService.buscarPorTime(time.getId()));
+        }
+        return times;
     }
 
     public Time detalheTime(Long id) {
-        return timeRepository.findById(id).orElseThrow(() -> new ExpectedException("Time nao encontrado"));
+        Time time = timeRepository.findById(id).orElseThrow(() -> new ExpectedException("Time nao encontrado"));
+        time.setIntegrantes(alunoService.buscarPorTime(time.getId()));
+        return time;
     }
+
+
 }

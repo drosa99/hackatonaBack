@@ -1,5 +1,7 @@
 package br.pucrs.projarq.hackatona.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,6 +15,7 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "TIME")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Time.class)
 public class Time {
     @Id
     @SequenceGenerator(allocationSize = 1, name = "time_seq", sequenceName = "time_seq")

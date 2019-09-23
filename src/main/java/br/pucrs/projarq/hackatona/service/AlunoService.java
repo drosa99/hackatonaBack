@@ -29,4 +29,23 @@ public class AlunoService {
         }
         return alunos;
     }
+
+    public List<Aluno> listarTodosAlunos() {
+        return alunoRepository.findAllByTimeIsNull();
+    }
+
+    public void cadastrarTime(List<Long> idAlunos, Long idTime) {
+        List<Aluno> alunos = new ArrayList<>();
+        for (Long id : idAlunos) {
+            alunos.add(alunoRepository.findById(id).get());
+        }
+        for (Aluno aluno : alunos) {
+            aluno.setTimeId(idTime);
+            alunoRepository.save(aluno);
+        }
+    }
+
+    public List<Aluno> buscarPorTime(Long idTime) {
+        return alunoRepository.findAllByTimeId(idTime);
+    }
 }
