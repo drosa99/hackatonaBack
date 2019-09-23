@@ -24,6 +24,9 @@ public class TimeService {
         List<String> cursos = new ArrayList<>();
         List<Aluno> integrantes = alunoService.buscarAlunosPorIds(timeRequest.getIntegrantes());
         for (Aluno aluno : integrantes) {
+            if (aluno.getTimeId() != null) {
+                throw new ExpectedException("Este aluno ja esta em um time");
+            }
             if (!cursos.contains(aluno.getCurso())) {
                 cursos.add(aluno.getCurso());
             }

@@ -31,7 +31,7 @@ public class AlunoService {
     }
 
     public List<Aluno> listarTodosAlunos() {
-        return alunoRepository.findAllByTimeIsNull();
+        return alunoRepository.findAllByTimeIdIsNull();
     }
 
     public void cadastrarTime(List<Long> idAlunos, Long idTime) {
