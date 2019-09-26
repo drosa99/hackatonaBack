@@ -35,6 +35,9 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
         alunoService.cadastroAluno(AlunoRequest.builder().nome("Rafael Mattos").curso("Sistemas de Informacao").build());
         alunoService.cadastroAluno(AlunoRequest.builder().nome("Eduardo Begossi").curso("Ciencia da Computacao").build());
         alunoService.cadastroAluno(AlunoRequest.builder().nome("Francisco Arias").curso("Engenharia de Software").build());
+        alunoService.cadastroAluno(AlunoRequest.builder().nome("Andressa Loreto").curso("Engenharia de Software").build());
+        alunoService.cadastroAluno(AlunoRequest.builder().nome("Natalia Queiroz").curso("Ciencia da Computacao").build());
+        alunoService.cadastroAluno(AlunoRequest.builder().nome("Mariana Miranda").curso("Engenharia da Computacao").build());
         timeService.cadastroTime(TimeRequest.builder().integrantes(Arrays.asList(1L, 4L, 3L)).nomeTime("Azul").build());
         timeService.cadastroTime(TimeRequest.builder().integrantes(Arrays.asList(2L, 5L)).nomeTime("Amarelo").build());
         avaliacaoService.cadastrarAvaliacao(AvaliacaoRequest.builder()
