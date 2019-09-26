@@ -58,8 +58,6 @@ public class TimeApi {
     public ResponseEntity<InputStreamResource> citiesReport(@PathVariable Long id) {
 
         List<Aluno> alunos = timeService.detalheTime(id).getIntegrantes();
-//        List<Aluno> alunos = Arrays.asList(Aluno.builder().nome("Daniela Amaral").curso("Engenharia de Software").build());
-
         ByteArrayInputStream bis = GeneratePDF.certificado(alunos);
 
         HttpHeaders headers = new HttpHeaders();

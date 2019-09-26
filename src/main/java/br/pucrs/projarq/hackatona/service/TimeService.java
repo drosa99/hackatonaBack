@@ -6,9 +6,11 @@ import br.pucrs.projarq.hackatona.entity.Time;
 import br.pucrs.projarq.hackatona.exception.ExpectedException;
 import br.pucrs.projarq.hackatona.repository.TimeRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TimeService {
@@ -20,12 +22,18 @@ public class TimeService {
         this.alunoService = alunoService;
     }
 
+    @Transactional
     public void cadastroTime(TimeRequest timeRequest) {
         List<String> cursos = new ArrayList<>();
+        if (timeRequest.getIntegrantes().size() > 6) {
+            throw new ExpectedException("Time nao pode ter mais de 6 integrantes.");
+        }
         List<Aluno> integrantes = alunoService.buscarAlunosPorIds(timeRequest.getIntegrantes());
         for (Aluno aluno : integrantes) {
             if (aluno.getTimeId() != null) {
-                throw new ExpectedException("Este aluno ja esta em um time");
+                if (timeRequest.getId() == null || !aluno.getTimeId().equals(timeRequest.getId())) {
+                    throw new ExpectedException("Este aluno ja esta em um time");
+                }
             }
             if (!cursos.contains(aluno.getCurso())) {
                 cursos.add(aluno.getCurso());
@@ -40,12 +48,18 @@ public class TimeService {
                 .integrantes(integrantes)
                 .build();
         Long id = timeRepository.save(time).getId();
-        alunoService.cadastrarTime(timeRequest.getIntegrantes(), id);
+        alunoService.cadastrarAlunosEmTime(timeRequest.getIntegrantes(), id);
 
     }
 
     public void excluirTime(Long id) {
         Time time = timeRepository.findById(id).orElseThrow(() -> new ExpectedException("Time nao encontrado"));
+        if (time.getAvaliacoes() != null && time.getAvaliacoes().size() > 0) {
+            throw new ExpectedException("Nao e possivel excluir times que possuem avaliacoes cadastradas.");
+        }
+        time.setIntegrantes(alunoService.buscarPorTime(time.getId()));
+        List<Long> idsAlunos = time.getIntegrantes().stream().map(Aluno::getId).collect(Collectors.toList());
+        alunoService.cadastrarAlunosEmTime(idsAlunos, null);
         timeRepository.delete(time);
     }
 

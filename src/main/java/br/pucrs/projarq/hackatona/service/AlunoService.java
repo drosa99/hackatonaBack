@@ -5,6 +5,7 @@ import br.pucrs.projarq.hackatona.entity.Aluno;
 import br.pucrs.projarq.hackatona.exception.ExpectedException;
 import br.pucrs.projarq.hackatona.repository.AlunoRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ public class AlunoService {
         this.alunoRepository = alunoRepository;
     }
 
+    @Transactional
     public void cadastroAluno(AlunoRequest alunoRequest) {
         Aluno aluno = Aluno.builder().curso(alunoRequest.getCurso()).nome(alunoRequest.getNome()).build();
         alunoRepository.save(aluno);
@@ -34,7 +36,8 @@ public class AlunoService {
         return alunoRepository.findAllByTimeIdIsNull();
     }
 
-    public void cadastrarTime(List<Long> idAlunos, Long idTime) {
+    @Transactional
+    public void cadastrarAlunosEmTime(List<Long> idAlunos, Long idTime) {
         List<Aluno> alunos = new ArrayList<>();
         for (Long id : idAlunos) {
             alunos.add(alunoRepository.findById(id).get());

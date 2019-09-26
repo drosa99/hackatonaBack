@@ -5,6 +5,7 @@ import br.pucrs.projarq.hackatona.entity.Avaliacao;
 import br.pucrs.projarq.hackatona.entity.Time;
 import br.pucrs.projarq.hackatona.repository.AvaliacaoRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AvaliacaoService {
@@ -17,6 +18,7 @@ public class AvaliacaoService {
         this.timeService = timeService;
     }
 
+    @Transactional
     public void cadastrarAvaliacao(AvaliacaoRequest avaliacaoRequest) {
         Time time = timeService.detalheTime(avaliacaoRequest.getIdTime());
         avaliacaoRepository.save(Avaliacao.builder()
