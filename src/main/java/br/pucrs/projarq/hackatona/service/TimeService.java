@@ -42,13 +42,22 @@ public class TimeService {
         if (cursos.size() < 2) {
             throw new ExpectedException("E necessario ter integrantes de pelo menos 2 cursos diferentes");
         }
+
+        //limpa alunos do time que esta sendo editado
+        if (timeRequest.getId() != null) {
+            List<Aluno> alunosTime = alunoService.buscarPorTime(timeRequest.getId());
+            List<Long> integrantesRemovidos = alunosTime.stream().map(Aluno::getId).collect(Collectors.toList());
+            alunoService.cadastrarAlunosEmTime(integrantesRemovidos, null);
+        }
+
+
         Time time = Time.builder()
                 .id(timeRequest.getId())
                 .nomeTime(timeRequest.getNomeTime())
                 .integrantes(integrantes)
                 .build();
-        Long id = timeRepository.save(time).getId();
-        alunoService.cadastrarAlunosEmTime(timeRequest.getIntegrantes(), id);
+        Time timeSalvo = timeRepository.save(time);
+        alunoService.cadastrarAlunosEmTime(timeRequest.getIntegrantes(), timeSalvo.getId());
 
     }
 
