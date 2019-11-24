@@ -49,6 +49,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
         timeService.cadastroTime(TimeRequest.builder().integrantes(Arrays.asList(1L, 4L, 3L)).nomeTime("Azul").build());
         timeService.cadastroTime(TimeRequest.builder().integrantes(Arrays.asList(2L, 5L)).nomeTime("Amarelo").build());
         usuarioService.salvar(Usuario.builder().email("dani@aluno").senha("senha").nome("Daniela Amaral").timeId(1L).isAvaliador(false).build());
+        usuarioService.salvar(Usuario.builder().email("maria@aluno").senha("senha").nome("Maria Silva").timeId(2L).isAvaliador(false).build());
         usuarioService.salvar(Usuario.builder().email("bianca@avaliador").senha("senha").nome("Bianca Camargo").isAvaliador(true).build());
         avaliacaoService.cadastrarAvaliacao(AvaliacaoRequest.builder()
                 .idTime(1L)
