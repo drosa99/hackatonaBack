@@ -4,10 +4,7 @@ import br.pucrs.projarq.hackatona.api.request.AvaliacaoRequest;
 import br.pucrs.projarq.hackatona.service.AvaliacaoService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -22,8 +19,14 @@ public class AvaliacaoApi {
 
     @PostMapping("")
     @ApiOperation(value = "Cadastra ou edita uma avaliacao.")
-    public ResponseEntity salvarTime(@Valid @RequestBody AvaliacaoRequest avaliacaoRequest) {
+    public ResponseEntity salvarAvaliacao(@Valid @RequestBody AvaliacaoRequest avaliacaoRequest) {
         avaliacaoService.cadastrarAvaliacao(avaliacaoRequest);
         return ResponseEntity.ok(Void.class);
+    }
+
+    @GetMapping("/encerrar")
+    @ApiOperation(value = "Encerrar votações e contabilizar vencedor.")
+    public ResponseEntity<String> encerrarVotacao() {
+        return ResponseEntity.ok(avaliacaoService.encerrarVotacao());
     }
 }
